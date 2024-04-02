@@ -10,5 +10,5 @@ def maya_main_window():
     return wrapInstance(int(main_window_pointer), QWidget)
 
 
-ICON_PATH = 'C:/Users/d.delaunay/Documents/maya_dev/scripts/sun/mayatools/cloth/ncloth.svg'
-STYLE_PATH = 'C:/Users/d.delaunay/Documents/maya_dev/scripts/sun/mayatools/cloth/style.css'
+ICON_PATH = 'project_files/ncloth.svg'
+STYLE_PATH = 'project_files/style.css'
