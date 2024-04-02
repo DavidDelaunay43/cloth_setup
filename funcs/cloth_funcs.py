@@ -2,6 +2,7 @@
 
 
 from maya import cmds, mel
+from typing import Literal
 
 
 ALL_GRP = "ALL"
@@ -222,7 +223,27 @@ def create_collider_mesh(init_mesh: str, nucleus_node: str, setup_prefix: str, c
     cmds.select(clear = True)
 
 
-def create_hi_setup(simu_nmesh: str, hi_mesh: str, setup_prefix: str):
+def wrap(high_mesh: str, low_mseh: str) -> str:
+
+    mel_cmd: str = f'''
+        select -cl  ;
+        select -r {high_mesh} ;
+        select -add {low_mseh} ;
+        doWrapArgList "7" { "1", "0", "10", "1", "0", "0", "0", "0" };
+        '''
+    
+    mel.eval(mel_cmd)
+
+    high_mesh_shape = cmds.listRelatives(high_mesh, shapes = True)
+    if high_mesh_shape:
+        high_mesh_shape = high_mesh_shape[0]
+
+    wrap_node = cmds.listConnections(high_mesh_shape, type = 'wrap')
+    if wrap_node:
+        return wrap_node[0]
+
+
+def create_hi_setup(simu_nmesh: str, hi_mesh: str, setup_prefix: str, wrap_node: Literal['wrap', 'cvwrap'] = 'cvwrap'):
     """
     Create a high-resolution setup for cloth simulation.
 
@@ -245,7 +266,13 @@ def create_hi_setup(simu_nmesh: str, hi_mesh: str, setup_prefix: str):
         blendshape = blendshape[0]
     cmds.setAttr(f"{blendshape}.{simu_nmesh}", 1.0)
 
-    wrap_node: str = cmds.cvWrap(hi_mesh, simu_driver_mesh, name=f'cvWrap_{hi_mesh}', radius=0.1)
+
+    if wrap_node == 'cvwrap':
+        cmds.cvWrap(hi_mesh, simu_driver_mesh, name=f'cvWrap_{hi_mesh}', radius=0.1)
+
+    else:
+        wrap(hi_mesh, simu_driver_mesh)
+
     cmds.select(clear = True)
 
 

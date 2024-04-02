@@ -9,7 +9,7 @@ from PySide2.QtWidgets import (
 
 from maya import cmds
 
-from funcs import set_preroll
+from ..funcs import set_preroll
 
 
 class PrerollWidget(QWidget):

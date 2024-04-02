@@ -14,7 +14,7 @@ from PySide2.QtCore import (
 
 from maya import cmds
 
-from funcs import create_full_setup
+from ..funcs import create_full_setup
 
 
 class SetupWidget(QWidget):

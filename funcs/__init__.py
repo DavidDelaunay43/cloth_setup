@@ -1,4 +1,4 @@
-from cloth_funcs import (
+from .cloth_funcs import (
     create_passive_collider,
     duplicate_mesh,
     ensure_cloth_groups,
@@ -11,7 +11,7 @@ from cloth_funcs import (
     create_full_setup
 )
 
-from preroll_funcs import (
+from .preroll_funcs import (
     get_preroll_frames,
     set_preroll_time_slider,
     set_key_frame,
