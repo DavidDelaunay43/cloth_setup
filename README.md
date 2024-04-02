@@ -1,7 +1,7 @@
 # cloth_setup
 
 ### Features
-- Nucleus system with ncloth and nRigid colliders
+- Nucleus system with nCloth and nRigid colliders
 - Export setup using cvwrap : https://github.com/chadmv/cvwrap
 - Set custom preroll for simulation
 
