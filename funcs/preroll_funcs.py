@@ -82,8 +82,16 @@ def set_preroll_keys(controlers: list, preroll_frames: dict) -> None:
         set_key_frame(ctrl)
 
 
-def set_preroll(controlers: list, preroll_values: list):
+def set_preroll(controlers: list, preroll_values: list, update_nucleus: bool = True) -> None:
 
     preroll_frames: dict = get_preroll_frames(*preroll_values)
     set_preroll_time_slider(preroll_frames)
     set_preroll_keys(controlers, preroll_frames)
+
+    if not update_nucleus:
+        return
+    
+    bind_pose_frame: float = preroll_frames[-1]
+
+    for nucleus_node in cmds.ls(type = 'nucleus'):
+        cmds.setAttr(f'{nucleus_node}.startFrame', bind_pose_frame)
