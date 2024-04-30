@@ -11,7 +11,8 @@ from PySide2.QtGui import (
     QIcon
 )
 
-from ..ui import PrerollWidget, SetupWidget
+from .preroll_widget import PrerollWidget
+from .setup_widget import SetupWidget
 
 from .utils import maya_main_window, STYLE_PATH, ICON_PATH
 
@@ -26,7 +27,7 @@ class ClothUi(QDialog):
         self.create_widgets()
         self.create_layout()
         self.create_connections()
-
+        self.show()
 
     def init_ui(self):
         self.setWindowTitle('Cloth Setup')

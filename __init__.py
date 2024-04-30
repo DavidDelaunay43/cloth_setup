@@ -1,3 +1,3 @@
-from ui import ClothUi
+from .ui.cloth_ui import ClothUi
 
-ClothUi.show()
+ClothUi()
