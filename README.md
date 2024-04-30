@@ -18,7 +18,6 @@ Place the "cloth_setup" folder into the maya script folder
 ### How to run
 
 ```python
-import cloth_setup
 from cloth_setup.ui.cloth_ui import ClothUi
 Clothui()
 ```
