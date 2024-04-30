@@ -9,6 +9,7 @@ ALL_GRP = "ALL"
 INIT_MESH_GRP = "initMesh_grp"
 CLOTH_GRP = "cloth_grp"
 HI_GRP = "hi_grp"
+OUTPUT_GRP = "output_grp"
 
 
 def create_passive_collider(mesh: str, nucleus_node: str) -> tuple:
@@ -80,7 +81,7 @@ def ensure_cloth_groups() -> None:
         return
 
     group_all: str = cmds.group(empty=True, world=True, name=ALL_GRP)
-    group_names = (INIT_MESH_GRP, CLOTH_GRP, HI_GRP)
+    group_names = (INIT_MESH_GRP, CLOTH_GRP, HI_GRP, OUTPUT_GRP)
 
     for grp_name in group_names:
         grp = cmds.group(empty=True, world=True, name=grp_name)

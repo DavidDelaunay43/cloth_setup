@@ -91,7 +91,7 @@ def set_preroll(controlers: list, preroll_values: list, update_nucleus: bool = T
     if not update_nucleus:
         return
     
-    bind_pose_frame: float = preroll_frames[-1]
+    bind_pose_frame: float = preroll_frames['bind_pose_frame']
 
     for nucleus_node in cmds.ls(type = 'nucleus'):
         cmds.setAttr(f'{nucleus_node}.startFrame', bind_pose_frame)
