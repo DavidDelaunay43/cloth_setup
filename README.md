@@ -19,7 +19,7 @@ Place the "cloth_setup" folder into the maya script folder
 
 ```python
 from cloth_setup.ui.cloth_ui import ClothUi
-Clothui()
+ClothUi()
 ```
 
 <div style="display: flex; justify-content: center;">

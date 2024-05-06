@@ -1,6 +1,6 @@
 # Cloth funcs
 
-
+from maya.api import OpenMaya as om
 from maya import cmds, mel
 from typing import Literal
 
@@ -10,6 +10,7 @@ INIT_MESH_GRP = "initMesh_grp"
 CLOTH_GRP = "cloth_grp"
 HI_GRP = "hi_grp"
 OUTPUT_GRP = "output_grp"
+CLOTH_SET = "CLOTH_ABC"
 
 
 def create_passive_collider(mesh: str, nucleus_node: str) -> tuple:
@@ -57,6 +58,7 @@ def duplicate_mesh(mesh: str, new_name: str) -> str:
         str: The name of the duplicated mesh.
     """
 
+    om.MGlobal.displayInfo(f'Mesh to duplicate : {mesh}')
     cmds.duplicate(mesh, name = new_name)
     shapes = cmds.listRelatives(new_name, shapes = True, fullPath = True)
     for shape in shapes:
@@ -86,6 +88,8 @@ def ensure_cloth_groups() -> None:
     for grp_name in group_names:
         grp = cmds.group(empty=True, world=True, name=grp_name)
         cmds.parent(grp, group_all)
+
+    cmds.sets(empty = True, name = CLOTH_SET)
 
     cmds.select(clear = True)
 
@@ -148,6 +152,7 @@ def ensure_init_mesh(deformed_mesh: str) -> str:
     if cmds.objExists(init_mesh):
         return init_mesh
 
+    om.MGlobal.displayInfo(f'Create initMesh from : {deformed_mesh}')
     duplicate_mesh(deformed_mesh, new_name=init_mesh)
     blendshape = cmds.blendShape(deformed_mesh, init_mesh, name=f"BShape_{init_mesh}")
     if isinstance(blendshape, list):
@@ -244,6 +249,17 @@ def wrap(high_mesh: str, low_mseh: str) -> str:
         return wrap_node[0]
 
 
+def create_output_setup(high_mesh: str, setup_prefix: str):
+    """
+    """
+
+    ensure_cloth_groups()
+
+    output_mesh: str = duplicate_mesh(high_mesh, f'outputMesh_{setup_prefix}')
+    cmds.parent(output_mesh, OUTPUT_GRP)
+    cmds.sets(output_mesh, add = CLOTH_SET)
+    
+
 def create_hi_setup(simu_nmesh: str, hi_mesh: str, setup_prefix: str, wrap_node: Literal['wrap', 'cvwrap'] = 'cvwrap'):
     """
     Create a high-resolution setup for cloth simulation.
@@ -266,7 +282,6 @@ def create_hi_setup(simu_nmesh: str, hi_mesh: str, setup_prefix: str, wrap_node:
     if isinstance(blendshape, list):
         blendshape = blendshape[0]
     cmds.setAttr(f"{blendshape}.{simu_nmesh}", 1.0)
-
 
     if wrap_node == 'cvwrap':
         cmds.cvWrap(hi_mesh, simu_driver_mesh, name=f'cvWrap_{hi_mesh}', radius=0.1)
