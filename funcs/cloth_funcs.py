@@ -13,6 +13,18 @@ OUTPUT_GRP = "output_grp"
 CLOTH_SET = "CLOTH_ABC"
 
 
+def blendshape(driver_mesh: str, deformed_mesh: str) -> str:
+    """
+    """
+
+    blendshape_node = cmds.blendShape(driver_mesh, deformed_mesh, name = f'BShape_{deformed_mesh}')
+    if isinstance(blendshape_node, list):
+        blendshape_node = blendshape_node[0]
+    cmds.setAttr(f"{blendshape_node}.{driver_mesh}", 1.0)
+
+    return blendshape_node
+
+
 def create_passive_collider(mesh: str, nucleus_node: str) -> tuple:
     """
     Create a passive collider for the specified mesh.
@@ -154,10 +166,8 @@ def ensure_init_mesh(deformed_mesh: str) -> str:
 
     om.MGlobal.displayInfo(f'Create initMesh from : {deformed_mesh}')
     duplicate_mesh(deformed_mesh, new_name=init_mesh)
-    blendshape = cmds.blendShape(deformed_mesh, init_mesh, name=f"BShape_{init_mesh}")
-    if isinstance(blendshape, list):
-        blendshape = blendshape[0]
-    cmds.setAttr(f"{blendshape}.{deformed_mesh}", 1.0)
+
+    blendshape(deformed_mesh, init_mesh)
 
     cmds.parent(init_mesh, INIT_MESH_GRP)
 
@@ -219,10 +229,7 @@ def create_collider_mesh(init_mesh: str, nucleus_node: str, setup_prefix: str, c
     collider_mesh: str = duplicate_mesh(init_mesh, new_name = f'{setup_prefix}_collider_{collider_suffix}')
     cmds.parent(collider_mesh, collider_grp)
 
-    blendshape = cmds.blendShape(init_mesh, collider_mesh, name=f"BShape_{collider_mesh}")
-    if isinstance(blendshape, list):
-        blendshape = blendshape[0]
-    cmds.setAttr(f"{blendshape}.{init_mesh}", 1.0)
+    blendshape(init_mesh, collider_mesh)
 
     nrigid_transform, _ = create_passive_collider(collider_mesh, nucleus_node)
     cmds.parent(nrigid_transform, collider_grp)
@@ -256,6 +263,7 @@ def create_output_setup(high_mesh: str, setup_prefix: str):
     ensure_cloth_groups()
 
     output_mesh: str = duplicate_mesh(high_mesh, f'outputMesh_{setup_prefix}')
+    blendshape(high_mesh, output_mesh)
     cmds.parent(output_mesh, OUTPUT_GRP)
     cmds.sets(output_mesh, add = CLOTH_SET)
     
@@ -277,17 +285,17 @@ def create_hi_setup(simu_nmesh: str, hi_mesh: str, setup_prefix: str, wrap_node:
 
     simu_driver_mesh = duplicate_mesh(simu_nmesh, new_name = f'{setup_prefix}_simu_driver')
     cmds.parent(simu_driver_mesh, hi_grp)
-    
-    blendshape = cmds.blendShape(simu_nmesh, simu_driver_mesh, name=f"BShape_{simu_driver_mesh}")
-    if isinstance(blendshape, list):
-        blendshape = blendshape[0]
-    cmds.setAttr(f"{blendshape}.{simu_nmesh}", 1.0)
+
+    blendshape(simu_nmesh, simu_driver_mesh)
 
     if wrap_node == 'cvwrap':
         cmds.cvWrap(hi_mesh, simu_driver_mesh, name=f'cvWrap_{hi_mesh}', radius=0.1)
 
     else:
         wrap(hi_mesh, simu_driver_mesh)
+
+    # output mesh
+    
 
     cmds.select(clear = True)
 
