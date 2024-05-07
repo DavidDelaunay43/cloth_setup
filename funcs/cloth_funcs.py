@@ -319,6 +319,7 @@ def create_full_setup(setup_prefix: str, low_mesh: str, high_mesh: str, collider
 
     himesh = duplicate_mesh(high_mesh, new_name = f'{setup_prefix}_hiMesh')
     create_hi_setup(simu_nmesh = simu_nmesh, hi_mesh = himesh, setup_prefix = setup_prefix)
+    create_output_setup(himesh, setup_prefix)
 
     if not colliders:
         return
