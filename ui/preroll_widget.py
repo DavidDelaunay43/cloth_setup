@@ -35,13 +35,13 @@ class PrerollWidget(QWidget):
         self.start_frame_lineedit = QLineEdit(f'{start_frame}')
 
         self.start_pose_offset_label = QLabel('Start pose offset')
-        self.start_pose_offset_lineedit = QLineEdit(f'{-5.0}')
+        self.start_pose_offset_lineedit = QLineEdit(f'{-25.0}')
         
         self.inter_pose_offset_label = QLabel('Inter pose offset')
-        self.inter_pose_offset_lineedit = QLineEdit(f'{-25.0}')
+        self.inter_pose_offset_lineedit = QLineEdit(f'{-125.0}')
         
         self.bind_pose_offset_label = QLabel('Bind pose offset')
-        self.bind_pose_offset_lineedit = QLineEdit(f'{-30.0}')
+        self.bind_pose_offset_lineedit = QLineEdit(f'{-150.0}')
 
         self.info_label = QLabel('Select controlers')
         self.run_button = QPushButton('Preroll')

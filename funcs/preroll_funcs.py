@@ -6,9 +6,9 @@ from maya import cmds
 
 def get_preroll_frames(
     start_anim_frame: float,
-    start_pose_offset: float = -5.0,
-    inter_pose_offset: float = -25.0, 
-    bind_pose_offset: float = -30.0 
+    start_pose_offset: float = -25.0,
+    inter_pose_offset: float = -125.0, 
+    bind_pose_offset: float = -150.0 
 ) -> dict:
 
     start_pose_frame: float = start_anim_frame + start_pose_offset
