@@ -88,17 +88,31 @@ class SetupWidget(QWidget):
 
 
     def add_collider(self):
-        collider_mesh_lineedit = QLineEdit()
-        collider_name_lineedit = QLineEdit()
 
-        for i in range(1, 10):
-            if self.collider_layout.itemAtPosition(i, 0):
-                continue
+        def add_single_collider(node: str):
+            collider_mesh_lineedit = QLineEdit()
+            collider_name_lineedit = QLineEdit()
 
-            self.collider_layout.addWidget(collider_mesh_lineedit, i, 0, Qt.AlignTop)
-            self.collider_layout.addWidget(collider_name_lineedit, i, 1, Qt.AlignTop)
+            for i in range(1, 10):
+                if self.collider_layout.itemAtPosition(i, 0):
+                    continue
 
-        self.collider_dict[collider_mesh_lineedit] = collider_name_lineedit
+                self.collider_layout.addWidget(collider_mesh_lineedit, i, 0, Qt.AlignTop)
+                self.collider_layout.addWidget(collider_name_lineedit, i, 1, Qt.AlignTop)
+
+                if node:
+                    collider_mesh_lineedit.setText(node)
+                    collider_name_lineedit.setText(node.split('_')[-1])
+
+            self.collider_dict[collider_mesh_lineedit] = collider_name_lineedit
+
+        selection = cmds.ls(selection = True)
+        if not selection:
+            add_single_collider()
+            return
+        
+        for node in selection:
+            add_single_collider(node)
 
 
     def update_lineedit(self):

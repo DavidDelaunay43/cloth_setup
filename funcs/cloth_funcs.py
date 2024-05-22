@@ -13,6 +13,15 @@ OUTPUT_GRP = "output_grp"
 CLOTH_SET = "CLOTH_ABC"
 
 
+def ignore_namespace(node: str) -> str:
+    """
+    """
+    if ':' in node:
+        node = node.split(':')[-1]
+
+    return node
+
+
 def blendshape(driver_mesh: str, deformed_mesh: str) -> str:
     """
     """
@@ -20,7 +29,7 @@ def blendshape(driver_mesh: str, deformed_mesh: str) -> str:
     blendshape_node = cmds.blendShape(driver_mesh, deformed_mesh, name = f'BShape_{deformed_mesh}')
     if isinstance(blendshape_node, list):
         blendshape_node = blendshape_node[0]
-    cmds.setAttr(f"{blendshape_node}.{driver_mesh}", 1.0)
+    cmds.setAttr(f"{blendshape_node}.{ignore_namespace(driver_mesh)}", 1.0)
 
     return blendshape_node
 
@@ -41,6 +50,7 @@ def create_passive_collider(mesh: str, nucleus_node: str) -> tuple:
     cmds.createNode('nRigid', name = nrigid_shape)
     nrigid_node: str = cmds.listRelatives(nrigid_shape, parent = True)[0]
     nrigid_node = cmds.rename(nrigid_node, f'{mesh}_nRigid')
+    cmds.setAttr(f'{nrigid_shape}.thickness', 0.0)
     cmds.select(clear = True)
 
     cmds.connectAttr(f'{mesh}.worldMesh[0]', f'{nrigid_shape}.inputMesh')
@@ -159,7 +169,7 @@ def ensure_init_mesh(deformed_mesh: str) -> str:
     ensure_cloth_groups()
 
     PFX: str = "initMesh"
-    init_mesh = f"{PFX}_{deformed_mesh}"
+    init_mesh = f"{PFX}_{ignore_namespace(deformed_mesh)}"
 
     if cmds.objExists(init_mesh):
         return init_mesh
