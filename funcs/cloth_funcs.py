@@ -276,7 +276,18 @@ def create_output_setup(high_mesh: str, setup_prefix: str):
     blendshape(high_mesh, output_mesh)
     cmds.parent(output_mesh, OUTPUT_GRP)
     cmds.sets(output_mesh, add = CLOTH_SET)
-    
+
+    cmds.select(clear = True)
+    jnt: str = f'JNT_{output_mesh}'
+    cmds.joint(name = jnt)
+    cmds.skinCluster(jnt, output_mesh, maximumInfluences = 1)
+    ctrl: str = f'CTRL_{output_mesh}'
+    cmds.circle(name = ctrl, radius = 7.0, normal = [0, 1, 0], constructionHistory = False)[0]
+    cmds.parent(ctrl, OUTPUT_GRP)
+    cmds.parent(jnt, ctrl)
+    cmds.setAttr(f'{jnt}.v', 0)
+    cmds.select(clear = True)
+
 
 def create_hi_setup(simu_nmesh: str, hi_mesh: str, setup_prefix: str, wrap_node: Literal['wrap', 'cvwrap'] = 'cvwrap'):
     """
