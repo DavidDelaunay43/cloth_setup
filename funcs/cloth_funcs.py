@@ -209,8 +209,12 @@ def create_cloth(simu_nmesh: str, setup_prefix: str) -> tuple:
 
     ncloth_transform = cmds.rename(ncloth_transform, f'{setup_prefix}_ncloth')
 
+    # set nucleus attributes
     start_frame: float = cmds.playbackOptions(query = True, minTime = True)
     cmds.setAttr(f'{nucleus_node}.startFrame', start_frame)
+    cmds.setAttr(f'{nucleus_node}.subSteps', 8)
+    cmds.setAttr(f'{nucleus_node}.maxCollisionIterations', 12)
+    cmds.setAttr(f'{nucleus_node}.spaceScale', 0.1)
 
     cmds.parent(simu_nmesh, nsystem_grp)
     cmds.parent(ncloth_transform, nsystem_grp)
