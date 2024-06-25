@@ -11,10 +11,18 @@ from PySide2.QtGui import (
     QIcon
 )
 
+def reload_modules():
+    from . import preroll_widget, setup_widget, utils
+    from importlib import reload
+    reload(preroll_widget)
+    reload(setup_widget)
+    reload(utils)
+
+reload_modules()
+
 from .preroll_widget import PrerollWidget
 from .setup_widget import SetupWidget
-
-from .utils import maya_main_window, STYLE_PATH, ICON_PATH
+from .utils import maya_main_window, ICON_PATH
 
 
 class ClothUi(QDialog):
@@ -31,13 +39,6 @@ class ClothUi(QDialog):
 
     def init_ui(self):
         self.setWindowTitle('Cloth Setup')
-        size = (350, 450)
-        self.resize(*size)
-
-        with open(STYLE_PATH, 'r') as file:
-            style = file.read()
-        self.setStyleSheet(style)
-
         self.setWindowIcon(QIcon(ICON_PATH))
 
 

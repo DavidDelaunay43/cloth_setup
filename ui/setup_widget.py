@@ -13,6 +13,7 @@ from PySide2.QtCore import (
 )
 
 from maya import cmds
+import maya.api.OpenMaya as om
 
 from ..funcs import create_full_setup
 
@@ -31,8 +32,7 @@ class SetupWidget(QWidget):
         self.collider_dict = {}
 
     def init_ui(self):
-        size = (300, 400)
-        self.setMinimumSize(*size)
+        self.setMinimumWidth(300)
 
     def create_widgets(self):
         self.setup_name_label = QLabel('Setup name')
@@ -93,7 +93,7 @@ class SetupWidget(QWidget):
             collider_mesh_lineedit = QLineEdit()
             collider_name_lineedit = QLineEdit()
 
-            for i in range(1, 10):
+            for i in range(1, 50):
                 if self.collider_layout.itemAtPosition(i, 0):
                     continue
 
@@ -108,7 +108,7 @@ class SetupWidget(QWidget):
 
         selection = cmds.ls(selection = True)
         if not selection:
-            add_single_collider()
+            om.MGlobal.displayWarning('Nothing is selected.')
             return
         
         for node in selection:

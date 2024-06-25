@@ -6,9 +6,7 @@ from PySide2.QtWidgets import (
     QVBoxLayout,
     QGridLayout
 )
-
 from maya import cmds
-
 from ..funcs import set_preroll
 
 
@@ -25,14 +23,15 @@ class PrerollWidget(QWidget):
 
 
     def init_ui(self):
-        size = (300, 400)
-        self.setMinimumSize(*size)
+        pass
 
 
     def create_widgets(self):
-        start_frame: float = cmds.playbackOptions(query = True, minTime = True)
+        self.info_label = QLabel('Select controlers')
+        self.run_button = QPushButton('Preroll')
+
         self.start_frame_label = QLabel(f'Start frame')
-        self.start_frame_lineedit = QLineEdit(f'{start_frame}')
+        self.start_frame_lineedit = QLineEdit(f'{cmds.playbackOptions(query = True, minTime = True)}')
 
         self.start_pose_offset_label = QLabel('Start pose offset')
         self.start_pose_offset_lineedit = QLineEdit(f'{-25.0}')
@@ -43,19 +42,18 @@ class PrerollWidget(QWidget):
         self.bind_pose_offset_label = QLabel('Bind pose offset')
         self.bind_pose_offset_lineedit = QLineEdit(f'{-150.0}')
 
-        self.info_label = QLabel('Select controlers')
-        self.run_button = QPushButton('Preroll')
-
 
     def create_layout(self):
         self.main_layout = QVBoxLayout()
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.main_layout)
 
         self.grid_widget = QWidget()
         self.grid_layout = QGridLayout()
+        self.grid_layout.setContentsMargins(0, 0, 0, 0)
         self.grid_widget.setLayout(self.grid_layout)
-        self.main_layout.addWidget(self.grid_widget)
 
+        # grid_layout
         self.grid_layout.addWidget(self.start_frame_label, 0, 0)
         self.grid_layout.addWidget(self.start_frame_lineedit, 0, 1)
         self.grid_layout.addWidget(self.start_pose_offset_label, 1, 0)
@@ -65,7 +63,9 @@ class PrerollWidget(QWidget):
         self.grid_layout.addWidget(self.bind_pose_offset_label, 3, 0)
         self.grid_layout.addWidget(self.bind_pose_offset_lineedit, 3, 1)
 
+        # main_layout
         self.main_layout.addWidget(self.info_label)
+        self.main_layout.addWidget(self.grid_widget)
         self.main_layout.addWidget(self.run_button)
 
 
